@@ -7,8 +7,8 @@ import org.junit.Test;
 
 public class WordSearchTest {
 	
-	final static String WORD = "helloworld";
-	final static char[] LINE_WITH_WORD = ("abc" + WORD + "defgh").toCharArray();
+	final static String HORIZONTAL_WORD = "helloworld";
+	final static char[] LINE_WITH_WORD = ("abc" + HORIZONTAL_WORD + "defgh").toCharArray();
 	final static char[] LINE_WITHOUT_WORD = "abcdefghijklmnopqrs".toCharArray();
 	WordSearch search = null;
 
@@ -22,7 +22,7 @@ public class WordSearchTest {
 	 */
 	@Test
 	public void shouldFindColumnsInHorizontal_OneLine() {
-		int[] result = search.findHorizontalColumns(LINE_WITH_WORD, WORD);
+		int[] result = search.findHorizontalColumns(LINE_WITH_WORD, HORIZONTAL_WORD);
 		assertArrayEquals(new int[] {3,4,5,6,7,8,9,10,11,12}, result);
 	}
 	
@@ -33,11 +33,17 @@ public class WordSearchTest {
 	
 	@Test
 	public void shouldFindRowInHorizontal_MultipleLines() {
+		search.setRows(buildRowsWithHorizontalWord());
+		assertArrayEquals(new int[][] {{1,3},{1,4},{1,5},{1,6},{1,7},{1,8},{1,9},{1,10},{1,11},{1,12}}, search.findHorizontal(HORIZONTAL_WORD));
+	}
+
+	private char[][] buildRowsWithHorizontalWord() {
 		char[][] rows = new char[3][];
 		rows[0] = LINE_WITHOUT_WORD;
 		rows[1] = LINE_WITH_WORD;
 		rows[2] = LINE_WITHOUT_WORD;
-		assertEquals(1, search.findHorizontalRow(rows, WORD));
+		return rows;
 	}
+	
 	
 }

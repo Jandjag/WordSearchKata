@@ -2,6 +2,12 @@ package jandjag.wordsearch;
 
 public class WordSearch {
 
+	private char[][] rows = null;
+	
+	public void setRows(char[][] rows) {
+		this.rows = rows;
+	}
+
 	int[] findHorizontalColumns(char[] lineValue, String word) {
 		int begin = new String(lineValue).indexOf(word);
 		if (begin >= 0) {
@@ -14,13 +20,18 @@ public class WordSearch {
 		return null;
 	}
 
-	int findHorizontalRow(char[][] rows, String word) {
+	int[][] findHorizontal(String word) {
 		for (int i = 0; i < rows.length; i++) {
-			if (findHorizontalColumns(rows[i], word) != null) {
-				return i;
+			int[] foundInColumns = findHorizontalColumns(rows[i], word);
+			if (foundInColumns != null) {
+				int[][] returnValue = new int[foundInColumns.length][2];
+				for (int r = 0; r < foundInColumns.length; r++) {
+					returnValue[r] = new int[] {i, foundInColumns[r]};
+				}
+				return returnValue;
 			}
 		}
-		return 0;
+		return null;
 	}
 
 }
