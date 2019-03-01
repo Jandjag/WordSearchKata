@@ -34,4 +34,31 @@ public class WordSearch {
 		return null;
 	}
 
+	public int[][] findVertialRows(String word) {
+		int[] firstLetterCoordinates = findFirstLetterCoordinates(word);
+		if (firstLetterCoordinates != null) {
+			int[][] returnValue = new int[word.length()][2];
+			int x = firstLetterCoordinates[0];
+			int y = firstLetterCoordinates[1];
+			for (int i = 0; i < word.length(); i++) {
+				returnValue[i] = new int[] {x, y};
+				x++;
+			}
+			return returnValue;
+		}
+		return null;
+	}
+
+	private int[] findFirstLetterCoordinates(String word) {
+		char firstLetter = word.charAt(0);
+		for (int row = 0; row < rows.length; row++) {
+			for (int col = 0; col < rows[row].length; col++) {
+				if (rows[row][col] == firstLetter) {
+					return new int[] {row, col};
+				}
+			}
+		}
+		return null;
+	}
+
 }
