@@ -59,6 +59,19 @@ public class WordSearch {
 			}
 		}
 		
+		//Search the diagonals that start on the top.
+		for (int colNum = 1; colNum < rows.length; colNum++) {
+			String diagonal = buildDiagonallyDescendingString(0, colNum);
+			int beginRow = diagonal.indexOf(word);
+			if (beginRow >= 0) {
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {colNum - 1 + beginRow + i, beginRow + 1 + i};
+				}
+				return returnValue;
+			}
+		}
+		
 		return null;
 	}
 	

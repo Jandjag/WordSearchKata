@@ -59,14 +59,20 @@ public class WordSearchTest {
 	 * Tests around Diagonally Descending Searches
 	 */
 	@Test
-	public void shouldFindForwardDiagonalWord_WhenExistsInLetters() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord());
+	public void shouldFindForwardDiagonalWord_WhenExistsInDiagonalStartingOnLeft() {
+		search.setRows(buildRowsWithDiagonallyDescendingWord(true));
 		assertArrayEquals(new int[][] {{1,1}, {2,2}, {3,3}, {4,4}, {5,5}, {6,6}, {7,7}, {8,8}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
 	}
 
 	@Test
+	public void shouldFindForwardDiagonalWord_WhenExistsInDiagonalStartingOnTop() {
+		search.setRows(buildRowsWithDiagonallyDescendingWord(false));
+		assertArrayEquals(new int[][] {{0,1}, {1,2}, {2,3}, {3,4}, {4,5}, {5,6}, {6,7}, {7,8}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
+	}
+
+	@Test
 	public void shouldReturnNull_WhenDiagonallyDescendingWordNotFound() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord());
+		search.setRows(buildRowsWithDiagonallyDescendingWord(true));
 		assertNull(search.findDiagonallyDescending("zyx"));
 	}
 	
@@ -75,18 +81,19 @@ public class WordSearchTest {
 	 * Helper methods for tests
 	 */
 	
-	private char[][] buildRowsWithDiagonallyDescendingWord() {
+	private char[][] buildRowsWithDiagonallyDescendingWord(boolean startOnLeft) {
 		char[][] rows = new char[10][];
-		rows[0] = "aaaaaaaaaa".toCharArray();
-		rows[1] = ("a" + DIAGONALLY_DESCENDING_WORD.charAt(0) + "aaaaaaaa").toCharArray();
-		rows[2] = ("aa" + DIAGONALLY_DESCENDING_WORD.charAt(1) + "aaaaaaa").toCharArray();
-		rows[3] = ("aaa" + DIAGONALLY_DESCENDING_WORD.charAt(2) + "aaaaaa").toCharArray();
-		rows[4] = ("aaaa" + DIAGONALLY_DESCENDING_WORD.charAt(3) + "aaaaa").toCharArray();
-		rows[5] = ("aaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(4) + "aaaa").toCharArray();
-		rows[6] = ("aaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(5) + "aaa").toCharArray();
-		rows[7] = ("aaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(6) + "aa").toCharArray();
-		rows[8] = ("aaaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(7) + "a").toCharArray();
-		rows[9] = "aaaaaaaaaa".toCharArray();
+		int startCount = startOnLeft ? 1 : 0;
+		rows[startOnLeft ? 0 : 9] = "aaaaaaaaaa".toCharArray();
+		rows[0 + startCount] = ("a" + DIAGONALLY_DESCENDING_WORD.charAt(0) + "aaaaaaaa").toCharArray();
+		rows[1 + startCount] = ("aa" + DIAGONALLY_DESCENDING_WORD.charAt(1) + "aaaaaaa").toCharArray();
+		rows[2 + startCount] = ("aaa" + DIAGONALLY_DESCENDING_WORD.charAt(2) + "aaaaaa").toCharArray();
+		rows[3 + startCount] = ("aaaa" + DIAGONALLY_DESCENDING_WORD.charAt(3) + "aaaaa").toCharArray();
+		rows[4 + startCount] = ("aaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(4) + "aaaa").toCharArray();
+		rows[5 + startCount] = ("aaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(5) + "aaa").toCharArray();
+		rows[6 + startCount] = ("aaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(6) + "aa").toCharArray();
+		rows[7 + startCount] = ("aaaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(7) + "a").toCharArray();
+		rows[8 + startCount] = "aaaaaaaaaa".toCharArray();
 		return rows;
 	}
 	
