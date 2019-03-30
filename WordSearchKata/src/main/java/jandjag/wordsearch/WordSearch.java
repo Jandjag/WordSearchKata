@@ -48,7 +48,7 @@ public class WordSearch {
 	int[][] findDiagonallyDescending(String word) {
 		//Search for Diagonals starting in first column.
 		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
-			String diagonal = buildDiagonallyDescendingString(rowNum, 0);
+			String diagonal = buildDiagonalDescendingString(rowNum, 0);
 			int beginCol = diagonal.indexOf(word);
 			if (beginCol >= 0) {
 				int[][] returnValue = new int[word.length()][2];
@@ -61,7 +61,7 @@ public class WordSearch {
 		
 		//Search the diagonals that start on the top.
 		for (int colNum = 1; colNum < rows.length; colNum++) {
-			String diagonal = buildDiagonallyDescendingString(0, colNum);
+			String diagonal = buildDiagonalDescendingString(0, colNum);
 			int beginRow = diagonal.indexOf(word);
 			if (beginRow >= 0) {
 				int[][] returnValue = new int[word.length()][2];
@@ -81,17 +81,66 @@ public class WordSearch {
 	 * @param startY The index of the column to start the search.
 	 * @return String of the characters in a diagonally descending line from the rows set in the class.
 	 */
-	String buildDiagonallyDescendingString(int startX, int startY) {
-		char[] diagonalString = new char[rows.length];
+	String buildDiagonalDescendingString(int startX, int startY) {
+		String diagonalString = "";
 		int max = rows.length;
 		
 		for (int x = 0; x < max && startX < max && startY < max; x++) {
-			diagonalString[x] = rows[startX][startY];
+			diagonalString += rows[startX][startY];
 			startX++;
 			startY++;
 		}
 		
-		return String.valueOf(diagonalString);
+		return diagonalString;
+	}
+
+	int[][] findDiagonallyAscending(String word) {
+		//Search for Diagonals starting in first column.
+		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
+			String diagonal = buildDiagonalAscendingString(rowNum, 0);
+			int beginCol = diagonal.indexOf(word);
+			if (beginCol >= 0) {
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {rowNum - beginCol - i, beginCol + i};
+				}
+				return returnValue;
+			}
+		}
+		
+		//Search the diagonals that start on the bottom.
+		for (int colNum = 1; colNum < rows.length; colNum++) {
+			String diagonal = buildDiagonalAscendingString(rows.length - 1, colNum);
+			int beginRow = diagonal.indexOf(word);
+			if (beginRow >= 0) {
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {rows.length + beginRow - i, beginRow + 1 + i};
+				}
+				return returnValue;
+			}
+		}
+			
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param startX The index of the row to start the search.
+	 * @param startY The index of the column to start the search.
+	 * @return String of the characters in a diagonally ascending line from the rows set in the class.
+	 */
+	String buildDiagonalAscendingString(int startX, int startY) {
+		String diagonalString = "";
+		int max = rows.length;
+		
+		for (int x = 0; x < max && startX >= 0 && startX < max && startY < max; x++) {
+			diagonalString += rows[startX][startY];
+			startX--;
+			startY++;
+		}
+		
+		return diagonalString;
 	}
 
 }

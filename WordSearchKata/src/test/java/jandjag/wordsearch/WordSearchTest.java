@@ -11,6 +11,7 @@ public class WordSearchTest {
 	final static String HORIZONTAL_WORD = "helloworld";
 	final static String VERTICAL_WORD = "howdy";
 	final static String DIAGONALLY_DESCENDING_WORD = "heythere";
+	final static String DIAGONALLY_ASCENDING_WORD = "niceday";
 	final static char[] LINE_WITH_WORD = ("abc" + HORIZONTAL_WORD + "defgh").toCharArray();
 	final static char[] LINE_WITHOUT_WORD = "abcdefghijklmnopqrs".toCharArray();
 	WordSearch search = null;
@@ -59,13 +60,13 @@ public class WordSearchTest {
 	 * Tests around Diagonally Descending Searches
 	 */
 	@Test
-	public void shouldFindForwardDiagonalWord_WhenExistsInDiagonalStartingOnLeft() {
+	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnLeft() {
 		search.setRows(buildRowsWithDiagonallyDescendingWord(true));
 		assertArrayEquals(new int[][] {{1,1}, {2,2}, {3,3}, {4,4}, {5,5}, {6,6}, {7,7}, {8,8}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
 	}
 
 	@Test
-	public void shouldFindForwardDiagonalWord_WhenExistsInDiagonalStartingOnTop() {
+	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnTop() {
 		search.setRows(buildRowsWithDiagonallyDescendingWord(false));
 		assertArrayEquals(new int[][] {{0,1}, {1,2}, {2,3}, {3,4}, {4,5}, {5,6}, {6,7}, {7,8}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
 	}
@@ -76,11 +77,48 @@ public class WordSearchTest {
 		assertNull(search.findDiagonallyDescending("zyx"));
 	}
 	
+	/*
+	 * Tests around Diagonally Descending Searches
+	 */
+	@Test
+	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnLeft() {
+		search.setRows(buildRowsWithDiagonallyAscending(true));
+		assertArrayEquals(new int[][] {{8,1}, {7,2}, {6,3}, {5,4}, {4,5}, {3,6}, {2,7}}, search.findDiagonallyAscending(DIAGONALLY_ASCENDING_WORD));
+	}
+
+	@Test
+	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnBottom() {
+		search.setRows(buildRowsWithDiagonallyAscending(false));
+		assertArrayEquals(new int[][] {{10,1}, {9,2}, {8,3}, {7,4}, {6,5}, {5,6}, {4,7}}, search.findDiagonallyAscending(DIAGONALLY_ASCENDING_WORD));
+	}
+	
+	@Test
+	public void shouldReturnNull_WhenDiagonallyAscendingWordNotFound() {
+		search.setRows(buildRowsWithDiagonallyAscending(true));
+		assertNull(search.findDiagonallyAscending("zyx"));
+	}
+	
 	
 	/*
 	 * Helper methods for tests
 	 */
 	
+	private char[][] buildRowsWithDiagonallyAscending(boolean startSearchOnLeft) {
+		char[][] rows = new char[10][];
+		int startCount = startSearchOnLeft ? 0 : 1;
+		rows[startSearchOnLeft ? 9 : 0] = "aaaaaaaaaa".toCharArray();
+		rows[0 + startCount] = "aaaaaaaaaa".toCharArray();
+		rows[1 + startCount] = "aaaaaaaaaa".toCharArray();
+		rows[2 + startCount] = ("aaaaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(6) + "aa").toCharArray();
+		rows[3 + startCount] = ("aaaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(5) + "aaa").toCharArray();
+		rows[4 + startCount] = ("aaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(4) + "aaaa").toCharArray();
+		rows[5 + startCount] = ("aaaa" + DIAGONALLY_ASCENDING_WORD.charAt(3) + "aaaaa").toCharArray();
+		rows[6 + startCount] = ("aaa" + DIAGONALLY_ASCENDING_WORD.charAt(2) + "aaaaaa").toCharArray();
+		rows[7 + startCount] = ("aa" + DIAGONALLY_ASCENDING_WORD.charAt(1) + "aaaaaaa").toCharArray();
+		rows[8 + startCount] = ("a" + DIAGONALLY_ASCENDING_WORD.charAt(0) + "aaaaaaaa").toCharArray();
+		return rows;
+	}
+
 	private char[][] buildRowsWithDiagonallyDescendingWord(boolean startOnLeft) {
 		char[][] rows = new char[10][];
 		int startCount = startOnLeft ? 1 : 0;
