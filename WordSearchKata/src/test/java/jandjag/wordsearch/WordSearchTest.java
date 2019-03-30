@@ -1,6 +1,7 @@
 package jandjag.wordsearch;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,37 +22,36 @@ public class WordSearchTest {
 	/*
 	 * Tests around Horizontal Search
 	 */
+	
 	@Test
-	public void shouldFindColumnsInHorizontal_OneLine() {
+	public void shouldReturnNull_whenHorizontalWordNotFound() {
 		
-		int[] result = search.findHorizontalColumns(LINE_WITH_WORD, HORIZONTAL_WORD);
-		assertArrayEquals(new int[] {3,4,5,6,7,8,9,10,11,12}, result);
+		search.setRows(buildRowsWithHorizontalWord());
+		assertNull(search.findHorizontal("zyx"));
 	}
 	
 	@Test
-	public void shouldReturnNull_whenWordNotInRow() {
-		
-		assertNull(search.findHorizontalColumns(LINE_WITHOUT_WORD, "zyx"));
-	}
-	
-	@Test
-	public void shouldFindRowInHorizontal_MultipleLines() {
+	public void shouldFindHorizontalWord_WhenExistsInRows() {
 		
 		search.setRows(buildRowsWithHorizontalWord());
 		assertArrayEquals(new int[][] {{1,3},{1,4},{1,5},{1,6},{1,7},{1,8},{1,9},{1,10},{1,11},{1,12}}, search.findHorizontal(HORIZONTAL_WORD));
 	}
 	
 	/*
-	 * Tests around Directional Searches
+	 * Tests around Vertical Searches
 	 */
 	
 	@Test 
-	public void shouldFindVerticalWord_WhenThereIsOneColumn() {
+	public void shouldFindVerticalWord_WhenExistsInColumn() {
 		search.setRows(buildRowsWithVerticalWord());
-		assertArrayEquals(new int[][] {{2,0}, {3,0}, {4,0}, {5,0}, {6,0}}, search.findVertialRows("howdy"));
-		
+		assertArrayEquals(new int[][] {{2,1}, {3,1}, {4,1}, {5,1}, {6,1}}, search.findVertical("howdy"));
 	}
-	
+
+	@Test 
+	public void shouldReturnnull_WhenVerticalWordNotFound() {
+		search.setRows(buildRowsWithVerticalWord());
+		assertNull(search.findVertical("zyx"));
+	}
 	
 	/*
 	 * Helper methods for tests
@@ -59,16 +59,16 @@ public class WordSearchTest {
 	
 	private char[][] buildRowsWithVerticalWord() {
 		char[][] rows = new char[10][];
-		rows[0] = new char[] {'a'};
-		rows[1] = new char[] {'a'};
-		rows[2] = new char[] {'h'};
-		rows[3] = new char[] {'o'};
-		rows[4] = new char[] {'w'};
-		rows[5] = new char[] {'d'};
-		rows[6] = new char[] {'y'};
-		rows[7] = new char[] {'a'};
-		rows[8] = new char[] {'a'};
-		rows[9] = new char[] {'a'};
+		rows[0] = "aaaaaaaaaa".toCharArray();
+		rows[1] = "aaaaaaaaaa".toCharArray();
+		rows[2] = "ahaaaaaaaa".toCharArray();
+		rows[3] = "aoaaaaaaaa".toCharArray();
+		rows[4] = "awaaaaaaaa".toCharArray();
+		rows[5] = "adaaaaaaaa".toCharArray();
+		rows[6] = "ayaaaaaaaa".toCharArray();
+		rows[7] = "aaaaaaaaaa".toCharArray();
+		rows[8] = "aaaaaaaaaa".toCharArray();
+		rows[9] = "aaaaaaaaaa".toCharArray();
 		return rows;
 	}
 	private char[][] buildRowsWithHorizontalWord() {

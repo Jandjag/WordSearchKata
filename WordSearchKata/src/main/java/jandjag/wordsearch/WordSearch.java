@@ -8,25 +8,28 @@ public class WordSearch {
 		this.rows = rows;
 	}
 
-	int[] findHorizontalColumns(char[] lineValue, String word) {
-		int begin = new String(lineValue).indexOf(word);
-		if (begin >= 0) {
-			int[] returnValue = new int[word.length()];
-			for (int i = 0; i < word.length(); i++) {
-				returnValue[i] = begin + i;
+	int[][] findHorizontal(String word) {
+		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
+			int begin = String.valueOf(rows[rowNum]).indexOf(word);
+			if (begin >= 0) {
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {rowNum, begin + i};
+				}
+				return returnValue;
 			}
-			return returnValue;
 		}
 		return null;
 	}
-
-	int[][] findHorizontal(String word) {
-		for (int i = 0; i < rows.length; i++) {
-			int[] foundInColumns = findHorizontalColumns(rows[i], word);
-			if (foundInColumns != null) {
-				int[][] returnValue = new int[foundInColumns.length][2];
-				for (int r = 0; r < foundInColumns.length; r++) {
-					returnValue[r] = new int[] {i, foundInColumns[r]};
+	
+	int[][] findVertical(String word) {
+		for (int col = 0; col < rows.length; col++) {
+			String columnValue = buildVerticalString(col);
+			int beginRow = columnValue.indexOf(word);
+			if (beginRow >= 0) {
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {beginRow + i, col};
 				}
 				return returnValue;
 			}
@@ -34,31 +37,13 @@ public class WordSearch {
 		return null;
 	}
 
-	public int[][] findVertialRows(String word) {
-		int[] firstLetterCoordinates = findFirstLetterCoordinates(word);
-		if (firstLetterCoordinates != null) {
-			int[][] returnValue = new int[word.length()][2];
-			int x = firstLetterCoordinates[0];
-			int y = firstLetterCoordinates[1];
-			for (int i = 0; i < word.length(); i++) {
-				returnValue[i] = new int[] {x, y};
-				x++;
-			}
-			return returnValue;
+	String buildVerticalString(int column) {
+		char[] columnChars = new char[rows.length];
+		for (int i = 0; i < rows.length; i++) {
+			columnChars[i] = rows[i][column];
 		}
-		return null;
-	}
-
-	private int[] findFirstLetterCoordinates(String word) {
-		char firstLetter = word.charAt(0);
-		for (int row = 0; row < rows.length; row++) {
-			for (int col = 0; col < rows[row].length; col++) {
-				if (rows[row][col] == firstLetter) {
-					return new int[] {row, col};
-				}
-			}
-		}
-		return null;
+		return String.valueOf(columnChars);
+		
 	}
 
 }
