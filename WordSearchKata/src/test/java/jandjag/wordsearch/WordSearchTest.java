@@ -29,7 +29,7 @@ public class WordSearchTest {
 	@Test
 	public void shouldReturnNull_whenHorizontalWordNotFound() {
 		
-		search.setRows(buildRowsWithHorizontalWord(true));
+		search.setLetters(buildRowsWithHorizontalWord(true));
 		search.setWord("zyx");
 		assertNull(search.find());
 	}
@@ -37,7 +37,7 @@ public class WordSearchTest {
 	@Test
 	public void shouldFindHorizontalWord_WhenExistsInRows() {
 		
-		search.setRows(buildRowsWithHorizontalWord(true));
+		search.setLetters(buildRowsWithHorizontalWord(true));
 		search.setWord(HORIZONTAL_WORD);
 		assertArrayEquals(new int[][] {{1,3},{1,4},{1,5},{1,6},{1,7},{1,8},{1,9},{1,10},{1,11},{1,12}}, search.find());
 	}
@@ -45,7 +45,7 @@ public class WordSearchTest {
 	@Test
 	public void shouldFindHorizontalWord_WhenExistsAndIsInReverse() {
 		
-		search.setRows(buildRowsWithHorizontalWord(false));
+		search.setLetters(buildRowsWithHorizontalWord(false));
 		search.setWord(HORIZONTAL_WORD);
 		assertArrayEquals(new int[][] {{1,12},{1,11},{1,10},{1,9},{1,8},{1,7},{1,6},{1,5},{1,4},{1,3}}, search.find());
 	}
@@ -56,21 +56,21 @@ public class WordSearchTest {
 	
 	@Test 
 	public void shouldFindVerticalWord_WhenExistsInColumn() {
-		search.setRows(buildRowsWithVerticalWord(true));
+		search.setLetters(buildRowsWithVerticalWord(true));
 		search.setWord(VERTICAL_WORD);
 		assertArrayEquals(new int[][] {{2,1}, {3,1}, {4,1}, {5,1}, {6,1}}, search.find());
 	}
 	
 	@Test 
 	public void shouldFindVerticalWord_WhenExistsInColumnInReverse() {
-		search.setRows(buildRowsWithVerticalWord(false));
+		search.setLetters(buildRowsWithVerticalWord(false));
 		search.setWord(VERTICAL_WORD);
 		assertArrayEquals(new int[][] {{6,1}, {5,1}, {4,1}, {3,1}, {2,1}}, search.find());
 	}
 
 	@Test 
 	public void shouldReturnnull_WhenVerticalWordNotFound() {
-		search.setRows(buildRowsWithVerticalWord(true));
+		search.setLetters(buildRowsWithVerticalWord(true));
 		search.setWord("zyx");
 		assertNull(search.find());
 	}
@@ -80,35 +80,35 @@ public class WordSearchTest {
 	 */
 	@Test
 	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnLeft() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(true, true));
+		search.setLetters(buildRowsWithDiagonallyDescendingWord(true, true));
 		search.setWord(DIAGONALLY_DESCENDING_WORD);
 		assertArrayEquals(new int[][] {{1,1}, {2,2}, {3,3}, {4,4}, {5,5}, {6,6}, {7,7}, {8,8}}, search.find());
 	}
 
 	@Test
 	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnLeftAndInReverse() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(true, false));
+		search.setLetters(buildRowsWithDiagonallyDescendingWord(true, false));
 		search.setWord(DIAGONALLY_DESCENDING_WORD);
 		assertArrayEquals(new int[][] {{8,8}, {7,7}, {6,6}, {5,5}, {4,4}, {3,3}, {2,2}, {1,1}}, search.find());
 	}
 
 	@Test
 	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnTop() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(false, true));
+		search.setLetters(buildRowsWithDiagonallyDescendingWord(false, true));
 		search.setWord(DIAGONALLY_DESCENDING_WORD);
 		assertArrayEquals(new int[][] {{0,1}, {1,2}, {2,3}, {3,4}, {4,5}, {5,6}, {6,7}, {7,8}}, search.find());
 	}
 
 	@Test
 	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnTopAndInReverse() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(false, false));
+		search.setLetters(buildRowsWithDiagonallyDescendingWord(false, false));
 		search.setWord(DIAGONALLY_DESCENDING_WORD);
 		assertArrayEquals(new int[][] {{7,8}, {6,7}, {5,6}, {4,5}, {3,4}, {2,3}, {1,2}, {0,1}}, search.find());
 	}
 
 	@Test
 	public void shouldReturnNull_WhenDiagonallyDescendingWordNotFound() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(true, true));
+		search.setLetters(buildRowsWithDiagonallyDescendingWord(true, true));
 		search.setWord("zyx");
 		assertNull(search.find());
 	}
@@ -118,35 +118,35 @@ public class WordSearchTest {
 	 */
 	@Test
 	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnLeft() {
-		search.setRows(buildRowsWithDiagonallyAscending(true, true));
+		search.setLetters(buildRowsWithDiagonallyAscending(true, true));
 		search.setWord(DIAGONALLY_ASCENDING_WORD);
 		assertArrayEquals(new int[][] {{8,1}, {7,2}, {6,3}, {5,4}, {4,5}, {3,6}, {2,7}}, search.find());
 	}
 
 	@Test
 	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnLeftAndInReverse() {
-		search.setRows(buildRowsWithDiagonallyAscending(true, false));
+		search.setLetters(buildRowsWithDiagonallyAscending(true, false));
 		search.setWord(DIAGONALLY_ASCENDING_WORD);
 		assertArrayEquals(new int[][] {{2,7}, {3,6}, {4,5}, {5,4}, {6,3}, {7,2}, {8,1}}, search.find());
 	}
 
 	@Test
 	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnBottom() {
-		search.setRows(buildRowsWithDiagonallyAscending(false, true));
+		search.setLetters(buildRowsWithDiagonallyAscending(false, true));
 		search.setWord(DIAGONALLY_ASCENDING_WORD);
 		assertArrayEquals(new int[][] {{10,1}, {9,2}, {8,3}, {7,4}, {6,5}, {5,6}, {4,7}}, search.find());
 	}
 
 	@Test
 	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnBottomAndInReverse() {
-		search.setRows(buildRowsWithDiagonallyAscending(false, false));
+		search.setLetters(buildRowsWithDiagonallyAscending(false, false));
 		search.setWord(DIAGONALLY_ASCENDING_WORD);
 		assertArrayEquals(new int[][] {{4,7}, {5,6}, {6,5}, {7,4}, {8,3}, {9,2}, {10,1}}, search.find());
 	}
 	
 	@Test
 	public void shouldReturnNull_WhenDiagonallyAscendingWordNotFound() {
-		search.setRows(buildRowsWithDiagonallyAscending(true, true));
+		search.setLetters(buildRowsWithDiagonallyAscending(true, true));
 		search.setWord("zyx");
 		assertNull(search.find());
 	}

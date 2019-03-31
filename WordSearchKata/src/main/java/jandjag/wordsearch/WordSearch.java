@@ -2,11 +2,11 @@ package jandjag.wordsearch;
 
 public class WordSearch {
 
-	private char[][] rows = null;
+	private char[][] letters = null;
 	private String word = null;
 	
-	public void setRows(char[][] rows) {
-		this.rows = rows;
+	public void setLetters(char[][] letters) {
+		this.letters = letters;
 	}
 	
 	public void setWord(String word) {
@@ -39,32 +39,6 @@ public class WordSearch {
 		return null;
 	}
 	
-	private int[][] findHorizontal() {
-		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
-			SearchDirection direction = SearchDirection.HORIZONTAL;
-			String rowAsString = buildDirectionalStringFromRows(rowNum, 0, direction);
-			int wordStartsAt = rowAsString.indexOf(word);
-
-			if (wordStartsAt >= 0) {
-				return findCoordinates(rowNum, wordStartsAt, word.length(), direction);
-			}
-
-			//Test if it is reversed.
-			String reverseWord = reverse(word);
-			wordStartsAt = String.valueOf(rows[rowNum]).indexOf(reverseWord);
-			if (wordStartsAt >= 0) {
-				int end = wordStartsAt + reverseWord.length() - 1;
-				int[][] returnValue = new int[word.length()][2];
-				for (int i = 0; i < word.length(); i++) {
-					returnValue[i] = new int[] {rowNum, end - i};
-				}
-				return returnValue;
-			}
-		}
-		
-		return null;
-	}
-
 	private int[][] findCoordinates(int startX, int startY, int wordLength, SearchDirection direction) {
 		int[][] returnValue = new int[wordLength][2];
 		for (int i = 0; i < wordLength; i++) {
@@ -74,16 +48,26 @@ public class WordSearch {
 		}
 		return returnValue;
 	}
+
+	private int[][] findReverseCoordinates(int startX, int startY, int wordLength, SearchDirection direction) {
+		int[][] returnValue = new int[wordLength][2];
+		for (int i = 0; i < wordLength; i++) {
+			returnValue[i] = new int[] {startX, startY};
+			startX -= direction.scopeX;
+			startY -= direction.scopeY;
+		}
+		return returnValue;
+	}
 	
 	private String buildDirectionalStringFromRows(int startX, int startY, SearchDirection direction) {
 		
 		String stringFromRow = "";
 		int scopeX = direction.scopeX;
 		int scopeY = direction.scopeY;
-		int max = rows.length;
+		int max = letters.length;
 
 		for (int i = 0; i < max && startX < max && startY < max && startX >= 0 && startY >= 0; i++) {
-			stringFromRow += rows[startX][startY];
+			stringFromRow += letters[startX][startY];
 			startX += scopeX;
 			startY += scopeY;
 		}
@@ -91,9 +75,35 @@ public class WordSearch {
 		return stringFromRow;
 	}
 
+	private String reverse(String word) {
+		return new StringBuilder(word).reverse().toString();
+	}
+	
+	private int[][] findHorizontal() {
+		SearchDirection direction = SearchDirection.HORIZONTAL;
+		for (int rowNum = 0; rowNum < letters.length; rowNum++) {
+			String rowAsString = buildDirectionalStringFromRows(rowNum, 0, direction);
+			int wordStartsAt = rowAsString.indexOf(word);
+
+			if (wordStartsAt >= 0) {
+				return findCoordinates(rowNum, wordStartsAt, word.length(), direction);
+			}
+
+			//Test if it is reversed.
+			String reverseWord = reverse(word);
+			wordStartsAt = String.valueOf(letters[rowNum]).indexOf(reverseWord);
+			if (wordStartsAt >= 0) {
+				int wordEndsAt = wordStartsAt + reverseWord.length() - 1;
+				return findReverseCoordinates(rowNum, wordEndsAt, word.length(), direction);
+			}
+		}
+		
+		return null;
+	}
+
 	private int[][] findVertical() {
-		for (int col = 0; col < rows.length; col++) {
-			SearchDirection direction = SearchDirection.VERTICAL;
+		SearchDirection direction = SearchDirection.VERTICAL;
+		for (int col = 0; col < letters.length; col++) {
 			String columnValue = buildDirectionalStringFromRows(0, col, direction);
 			int wordStartsAt = columnValue.indexOf(word);
 			if (wordStartsAt >= 0) {
@@ -104,25 +114,17 @@ public class WordSearch {
 			String reverseWord = reverse(word);
 			wordStartsAt = columnValue.indexOf(reverseWord);
 			if (wordStartsAt >= 0) {
-				int end = wordStartsAt + reverseWord.length() - 1;
-				int[][] returnValue = new int[word.length()][2];
-				for (int i = 0; i < word.length(); i++) {
-					returnValue[i] = new int[] {end - i, col};
-				}
-				return returnValue;
+				int wordEndsAt = wordStartsAt + reverseWord.length() - 1;
+				return findReverseCoordinates(wordEndsAt, col, word.length(), direction);
 			}
 		}
 		return null;
 	}
 
-	private String reverse(String word) {
-		return new StringBuilder(word).reverse().toString();
-	}
-
 	private int[][] findDiagonallyDescending() {
-		//Search for Diagonals starting in first column.
 		SearchDirection direction = SearchDirection.DIAGONALLY_DESCENDING;
-		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
+		//Search for Diagonals starting in first column.
+		for (int rowNum = 0; rowNum < letters.length; rowNum++) {
 			String diagonal = buildDirectionalStringFromRows(rowNum, 0, direction);
 			int wordStartsAt = diagonal.indexOf(word);
 			if (wordStartsAt >= 0) {
@@ -133,17 +135,13 @@ public class WordSearch {
 			String reverseWord = reverse(word);
 			wordStartsAt = diagonal.indexOf(reverseWord);
 			if (wordStartsAt >= 0) {
-				int end = wordStartsAt + reverseWord.length() - 1;
-				int[][] returnValue = new int[word.length()][2];
-				for (int i = 0; i < word.length(); i++) {
-					returnValue[i] = new int[] {rowNum + end - i, end - i};
-				}
-				return returnValue;
+				int wordEndsAt = wordStartsAt + reverseWord.length() - 1;
+				return findReverseCoordinates(rowNum + wordEndsAt, wordEndsAt, word.length(), direction);
 			}
 		}
 		
 		//Search the diagonals that start on the top.
-		for (int colNum = 1; colNum < rows.length; colNum++) {
+		for (int colNum = 1; colNum < letters.length; colNum++) {
 			String diagonal = buildDirectionalStringFromRows(0, colNum, direction);
 			int wordStartsAt = diagonal.indexOf(word);
 			if (wordStartsAt >= 0) {
@@ -154,12 +152,8 @@ public class WordSearch {
 			String reverseWord = reverse(word);
 			wordStartsAt = diagonal.indexOf(reverseWord);
 			if (wordStartsAt >= 0) {
-				int end = wordStartsAt + reverseWord.length();
-				int[][] returnValue = new int[word.length()][2];
-				for (int i = 0; i < word.length(); i++) {
-					returnValue[i] = new int[] {end - 1 - i, end - i};
-				}
-				return returnValue;
+				int wordEndsAt = wordStartsAt + reverseWord.length();
+				return findReverseCoordinates(wordEndsAt - 1, wordEndsAt, word.length(), direction);
 			}
 		}
 		
@@ -167,9 +161,9 @@ public class WordSearch {
 	}
 	
 	private int[][] findDiagonallyAscending() {
-		//Search for Diagonals starting in first column.
 		SearchDirection direction = SearchDirection.DIAGONALLY_ASCENDING;
-		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
+		//Search for Diagonals starting in first column.
+		for (int rowNum = 0; rowNum < letters.length; rowNum++) {
 			String diagonal = buildDirectionalStringFromRows(rowNum, 0, direction);
 			int wordStartsAt = diagonal.indexOf(word);
 			if (wordStartsAt >= 0) {
@@ -180,33 +174,25 @@ public class WordSearch {
 			String reverseWord = reverse(word);
 			wordStartsAt = diagonal.indexOf(reverseWord);
 			if (wordStartsAt >= 0) {
-				int end = wordStartsAt + reverseWord.length() - 1;
-				int[][] returnValue = new int[word.length()][2];
-				for (int i = 0; i < word.length(); i++) {
-					returnValue[i] = new int[] {rowNum - end + i, end - i};
-				}
-				return returnValue;
+				int wordEndsAt = wordStartsAt + reverseWord.length() - 1;
+				return findReverseCoordinates(rowNum - wordEndsAt, wordEndsAt, word.length(), direction);
 			}
 		}
 		
 		//Search the diagonals that start on the bottom.
-		for (int colNum = 1; colNum < rows.length; colNum++) {
-			String diagonal = buildDirectionalStringFromRows(rows.length - 1, colNum, direction);
+		for (int colNum = 1; colNum < letters.length; colNum++) {
+			String diagonal = buildDirectionalStringFromRows(letters.length - 1, colNum, direction);
 			int wordStartsAt = diagonal.indexOf(word);
 			if (wordStartsAt >= 0) {
-				return findCoordinates(rows.length + wordStartsAt, wordStartsAt + 1, word.length(), direction);
+				return findCoordinates(letters.length + wordStartsAt, wordStartsAt + 1, word.length(), direction);
 			}
 			
 			//Check for reverse.
 			String reverseWord = reverse(word);
 			wordStartsAt = diagonal.indexOf(reverseWord);
 			if (wordStartsAt >= 0) {
-				int end = wordStartsAt + reverseWord.length() - 1;
-				int[][] returnValue = new int[word.length()][2];
-				for (int i = 0; i < word.length(); i++) {
-					returnValue[i] = new int[] {rows.length - end + i, end + 1 - i};
-				}
-				return returnValue;
+				int wordEndsAt = wordStartsAt + reverseWord.length() - 1;
+				return findReverseCoordinates(letters.length - wordEndsAt, wordEndsAt + 1, word.length(), direction);
 			}
 		}
 			
