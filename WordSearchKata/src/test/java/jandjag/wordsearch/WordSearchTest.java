@@ -4,6 +4,9 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -121,7 +124,24 @@ public class WordSearchTest {
 	}
 	
 	/*
-	 * Tests around Diagonally Descending Searches
+	 * Errors found with processor testing around Diagonal Descending
+	 */
+	@Test
+	public void shouldFindDiagonallyDescendingWord_WhenExistsInLettersAndInReverse() {
+		search.setLetters(buildQuiltingLetters());
+		search.setWord("BINDING");
+		assertEquals("BINDING: (10,6),(9,5),(8,4),(7,3),(6,2),(5,1),(4,0)", search.find());
+	}
+
+	@Test
+	public void shouldFindDiagonallyDescendingWord_WhenExistsInLetters() {
+		search.setLetters(buildQuiltingLetters());
+		search.setWord("FABRIC");
+		assertEquals("FABRIC: (7,1),(8,2),(9,3),(10,4),(11,5),(12,6)", search.find());
+	}
+	
+	/*
+	 * Tests around Diagonally Ascending Searches
 	 */
 	@Test
 	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnLeft() {
@@ -233,6 +253,28 @@ public class WordSearchTest {
 		rows[14] = LINE_WITHOUT_WORD;
 		rows[15] = LINE_WITHOUT_WORD;
 		return rows;
+	}
+	
+	private char[][] buildQuiltingLetters() {
+		char[][] fileContents = new char[15][15];
+		
+		fileContents[0] = "NDLPGUFGGOYQGPV".toCharArray();
+		fileContents[1] = "NPGDTNNFIEDFPFU".toCharArray();
+		fileContents[2] = "WSUSNIIPAPXGZGB".toCharArray();
+		fileContents[3] = "WZQOTLKDGBGMTSC".toCharArray();
+		fileContents[4] = "GNITLIUQNBRBSFI".toCharArray();
+		fileContents[5] = "LJUNATPQIIQIMUA".toCharArray();
+		fileContents[6] = "XCODQLGMCLBNCRJ".toCharArray();
+		fileContents[7] = "MJHGBMTXEDEZLDR".toCharArray();
+		fileContents[8] = "LESDXUEYIZCVPMO".toCharArray();
+		fileContents[9] = "RJOOJNJJPMVXXWY".toCharArray();
+		fileContents[10] = "PATTERNBZKJPSLX".toCharArray();
+		fileContents[11] = "MYELUGWATVUUUVV".toCharArray();
+		fileContents[12] = "YVEEQTWTETGYPTR".toCharArray();
+		fileContents[13] = "OCLCAULIHGYOHKH".toCharArray();
+		fileContents[14] = "QERBPUQKVOHKFNF".toCharArray();
+		
+		return fileContents;
 	}
 	
 }

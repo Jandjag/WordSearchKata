@@ -11,8 +11,45 @@ public class WordSearchProcessorTest {
 	
 	@Test
 	public void processWordSearch_StarTrekExample() {
-		List<String> fileContents = buildStarTrekContents();
-		assertEquals(getStarTrekOutput(), WordSearchProcessor.processWordSearch(fileContents));
+		assertEquals(getStarTrekOutput(), WordSearchProcessor.processWordSearch(buildStarTrekContents()));
+	}
+	
+	@Test
+	public void processWordSearch_QuiltingExample() {
+		assertEquals(getQuiltingOutput(), WordSearchProcessor.processWordSearch(buildQuiltingContents()));
+	}
+	
+	private List<String> buildQuiltingContents() {
+		List<String> fileContents = new ArrayList<String>();
+		
+		fileContents.add("BATIK,BINDING,CUTTING,FABRIC,PATTERN,PIECING,QUILTING");
+		fileContents.add("N,D,L,P,G,U,F,G,G,O,Y,Q,G,P,V");
+		fileContents.add("N,P,G,D,T,N,N,F,I,E,D,F,P,F,U");
+		fileContents.add("W,S,U,S,N,I,I,P,A,P,X,G,Z,G,B");
+		fileContents.add("W,Z,Q,O,T,L,K,D,G,B,G,M,T,S,C");
+		fileContents.add("G,N,I,T,L,I,U,Q,N,B,R,B,S,F,I");
+		fileContents.add("L,J,U,N,A,T,P,Q,I,I,Q,I,M,U,A");
+		fileContents.add("X,C,O,D,Q,L,G,M,C,L,B,N,C,R,J");
+		fileContents.add("M,J,H,G,B,M,T,X,E,D,E,Z,L,D,R");
+		fileContents.add("L,E,S,D,X,U,E,Y,I,Z,C,V,P,M,O");
+		fileContents.add("R,J,O,O,J,N,J,J,P,M,V,X,X,W,Y");
+		fileContents.add("P,A,T,T,E,R,N,B,Z,K,J,P,S,L,X");
+		fileContents.add("M,Y,E,L,U,G,W,A,T,V,U,U,U,V,V");
+		fileContents.add("Y,V,E,E,Q,T,W,T,E,T,G,Y,P,T,R");
+		fileContents.add("O,C,L,C,A,U,L,I,H,G,Y,O,H,K,H");
+		fileContents.add("Q,E,R,B,P,U,Q,K,V,O,H,K,F,N,F");
+		
+		return fileContents;
+	}
+	
+	private String getQuiltingOutput() {
+		return "BATIK: (7,10),(7,11),(7,12),(7,13),(7,14)\n" + 
+				"BINDING: (10,6),(9,5),(8,4),(7,3),(6,2),(5,1),(4,0)\n" + 
+				"CUTTING: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1),(7,0)\n" + 
+				"FABRIC: (7,1),(8,2),(9,3),(10,4),(11,5),(12,6)\n" + 
+				"PATTERN: (0,10),(1,10),(2,10),(3,10),(4,10),(5,10),(6,10)\n" + 
+				"PIECING: (8,9),(8,8),(8,7),(8,6),(8,5),(8,4),(8,3)\n" + 
+				"QUILTING: (7,4),(6,4),(5,4),(4,4),(3,4),(2,4),(1,4),(0,4)\n";
 	}
 
 	private List<String> buildStarTrekContents() {

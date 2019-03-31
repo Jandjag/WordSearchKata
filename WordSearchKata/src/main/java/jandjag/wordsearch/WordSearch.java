@@ -162,15 +162,15 @@ public class WordSearch {
 			String diagonal = buildDirectionalStringFromRows(0, colNum, direction);
 			int wordStartsAt = diagonal.indexOf(word);
 			if (wordStartsAt >= 0) {
-				return findCoordinates(colNum - 1 + wordStartsAt, wordStartsAt + 1, word.length(), direction);
+				return findCoordinates(wordStartsAt, colNum + wordStartsAt, word.length(), direction);
 			}
 			
 			//Check if it is reversed.
 			String reverseWord = reverse(word);
 			wordStartsAt = diagonal.indexOf(reverseWord);
 			if (wordStartsAt >= 0) {
-				int wordEndsAt = wordStartsAt + reverseWord.length();
-				return findReverseCoordinates(wordEndsAt - 1, wordEndsAt, word.length(), direction);
+				int wordEndsAt = wordStartsAt + reverseWord.length() - 1;
+				return findReverseCoordinates(wordEndsAt, wordEndsAt + colNum, word.length(), direction);
 			}
 		}
 		
