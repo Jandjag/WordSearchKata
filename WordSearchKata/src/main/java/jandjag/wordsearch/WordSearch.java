@@ -19,6 +19,21 @@ public class WordSearch {
 				return returnValue;
 			}
 		}
+		
+		//Test if it is reversed.
+		String reverseWord = reverse(word);
+		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
+			int begin = String.valueOf(rows[rowNum]).indexOf(reverseWord);
+			if (begin >= 0) {
+				int end = begin + reverseWord.length() - 1;
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {rowNum, end - i};
+				}
+				return returnValue;
+			}
+		}		
+		
 		return null;
 	}
 	
@@ -33,8 +48,24 @@ public class WordSearch {
 				}
 				return returnValue;
 			}
+			
+			//Try in the reverse
+			String reverseWord = reverse(word);
+			beginRow = columnValue.indexOf(reverseWord);
+			if (beginRow >= 0) {
+				int end = beginRow + reverseWord.length() - 1;
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {end - i, col};
+				}
+				return returnValue;
+			}
 		}
 		return null;
+	}
+
+	private String reverse(String word) {
+		return new StringBuilder(word).reverse().toString();
 	}
 
 	String buildVerticalString(int column) {
@@ -57,6 +88,18 @@ public class WordSearch {
 				}
 				return returnValue;
 			}
+			
+			//Check if it is reversed.
+			String reverseWord = reverse(word);
+			beginCol = diagonal.indexOf(reverseWord);
+			if (beginCol >= 0) {
+				int end = beginCol + reverseWord.length() - 1;
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {rowNum + end - i, end - i};
+				}
+				return returnValue;
+			}
 		}
 		
 		//Search the diagonals that start on the top.
@@ -67,6 +110,18 @@ public class WordSearch {
 				int[][] returnValue = new int[word.length()][2];
 				for (int i = 0; i < word.length(); i++) {
 					returnValue[i] = new int[] {colNum - 1 + beginRow + i, beginRow + 1 + i};
+				}
+				return returnValue;
+			}
+			
+			//Check if it is reversed.
+			String reverseWord = reverse(word);
+			beginRow = diagonal.indexOf(reverseWord);
+			if (beginRow >= 0) {
+				int end = beginRow + reverseWord.length();
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {end - 1 - i, end - i};
 				}
 				return returnValue;
 			}
@@ -106,6 +161,18 @@ public class WordSearch {
 				}
 				return returnValue;
 			}
+			
+			//Check for reverse.
+			String reverseWord = reverse(word);
+			beginCol = diagonal.indexOf(reverseWord);
+			if (beginCol >= 0) {
+				int end = beginCol + reverseWord.length() - 1;
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {rowNum - end + i, end - i};
+				}
+				return returnValue;
+			}
 		}
 		
 		//Search the diagonals that start on the bottom.
@@ -116,6 +183,18 @@ public class WordSearch {
 				int[][] returnValue = new int[word.length()][2];
 				for (int i = 0; i < word.length(); i++) {
 					returnValue[i] = new int[] {rows.length + beginRow - i, beginRow + 1 + i};
+				}
+				return returnValue;
+			}
+			
+			//Check for reverse.
+			String reverseWord = reverse(word);
+			beginRow = diagonal.indexOf(reverseWord);
+			if (beginRow >= 0) {
+				int end = beginRow + reverseWord.length() - 1;
+				int[][] returnValue = new int[word.length()][2];
+				for (int i = 0; i < word.length(); i++) {
+					returnValue[i] = new int[] {rows.length - end + i, end + 1 - i};
 				}
 				return returnValue;
 			}

@@ -12,8 +12,8 @@ public class WordSearchTest {
 	final static String VERTICAL_WORD = "howdy";
 	final static String DIAGONALLY_DESCENDING_WORD = "heythere";
 	final static String DIAGONALLY_ASCENDING_WORD = "niceday";
-	final static char[] LINE_WITH_WORD = ("abc" + HORIZONTAL_WORD + "defgh").toCharArray();
-	final static char[] LINE_WITHOUT_WORD = "abcdefghijklmnopqrs".toCharArray();
+	final static char[] LINE_WITH_WORD = ("abc" + HORIZONTAL_WORD + "def").toCharArray();
+	final static char[] LINE_WITHOUT_WORD = "abcdefghijklmnopq".toCharArray();
 	WordSearch search = null;
 
 	@Before
@@ -29,15 +29,22 @@ public class WordSearchTest {
 	@Test
 	public void shouldReturnNull_whenHorizontalWordNotFound() {
 		
-		search.setRows(buildRowsWithHorizontalWord());
+		search.setRows(buildRowsWithHorizontalWord(true));
 		assertNull(search.findHorizontal("zyx"));
 	}
 	
 	@Test
 	public void shouldFindHorizontalWord_WhenExistsInRows() {
 		
-		search.setRows(buildRowsWithHorizontalWord());
+		search.setRows(buildRowsWithHorizontalWord(true));
 		assertArrayEquals(new int[][] {{1,3},{1,4},{1,5},{1,6},{1,7},{1,8},{1,9},{1,10},{1,11},{1,12}}, search.findHorizontal(HORIZONTAL_WORD));
+	}
+	
+	@Test
+	public void shouldFindHorizontalWord_WhenExistsAndIsInReverse() {
+		
+		search.setRows(buildRowsWithHorizontalWord(false));
+		assertArrayEquals(new int[][] {{1,12},{1,11},{1,10},{1,9},{1,8},{1,7},{1,6},{1,5},{1,4},{1,3}}, search.findHorizontal(HORIZONTAL_WORD));
 	}
 	
 	/*
@@ -46,13 +53,19 @@ public class WordSearchTest {
 	
 	@Test 
 	public void shouldFindVerticalWord_WhenExistsInColumn() {
-		search.setRows(buildRowsWithVerticalWord());
+		search.setRows(buildRowsWithVerticalWord(true));
 		assertArrayEquals(new int[][] {{2,1}, {3,1}, {4,1}, {5,1}, {6,1}}, search.findVertical(VERTICAL_WORD));
+	}
+	
+	@Test 
+	public void shouldFindVerticalWord_WhenExistsInColumnInReverse() {
+		search.setRows(buildRowsWithVerticalWord(false));
+		assertArrayEquals(new int[][] {{6,1}, {5,1}, {4,1}, {3,1}, {2,1}}, search.findVertical(VERTICAL_WORD));
 	}
 
 	@Test 
 	public void shouldReturnnull_WhenVerticalWordNotFound() {
-		search.setRows(buildRowsWithVerticalWord());
+		search.setRows(buildRowsWithVerticalWord(true));
 		assertNull(search.findVertical("zyx"));
 	}
 	
@@ -61,19 +74,31 @@ public class WordSearchTest {
 	 */
 	@Test
 	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnLeft() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(true));
+		search.setRows(buildRowsWithDiagonallyDescendingWord(true, true));
 		assertArrayEquals(new int[][] {{1,1}, {2,2}, {3,3}, {4,4}, {5,5}, {6,6}, {7,7}, {8,8}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
 	}
 
 	@Test
+	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnLeftAndInReverse() {
+		search.setRows(buildRowsWithDiagonallyDescendingWord(true, false));
+		assertArrayEquals(new int[][] {{8,8}, {7,7}, {6,6}, {5,5}, {4,4}, {3,3}, {2,2}, {1,1}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
+	}
+
+	@Test
 	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnTop() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(false));
+		search.setRows(buildRowsWithDiagonallyDescendingWord(false, true));
 		assertArrayEquals(new int[][] {{0,1}, {1,2}, {2,3}, {3,4}, {4,5}, {5,6}, {6,7}, {7,8}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
 	}
 
 	@Test
+	public void shouldFindDiagonalDescendingWord_WhenExistsInDiagonalStartingOnTopAndInReverse() {
+		search.setRows(buildRowsWithDiagonallyDescendingWord(false, false));
+		assertArrayEquals(new int[][] {{7,8}, {6,7}, {5,6}, {4,5}, {3,4}, {2,3}, {1,2}, {0,1}}, search.findDiagonallyDescending(DIAGONALLY_DESCENDING_WORD));
+	}
+
+	@Test
 	public void shouldReturnNull_WhenDiagonallyDescendingWordNotFound() {
-		search.setRows(buildRowsWithDiagonallyDescendingWord(true));
+		search.setRows(buildRowsWithDiagonallyDescendingWord(true, true));
 		assertNull(search.findDiagonallyDescending("zyx"));
 	}
 	
@@ -82,19 +107,31 @@ public class WordSearchTest {
 	 */
 	@Test
 	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnLeft() {
-		search.setRows(buildRowsWithDiagonallyAscending(true));
+		search.setRows(buildRowsWithDiagonallyAscending(true, true));
 		assertArrayEquals(new int[][] {{8,1}, {7,2}, {6,3}, {5,4}, {4,5}, {3,6}, {2,7}}, search.findDiagonallyAscending(DIAGONALLY_ASCENDING_WORD));
 	}
 
 	@Test
+	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnLeftAndInReverse() {
+		search.setRows(buildRowsWithDiagonallyAscending(true, false));
+		assertArrayEquals(new int[][] {{2,7}, {3,6}, {4,5}, {5,4}, {6,3}, {7,2}, {8,1}}, search.findDiagonallyAscending(DIAGONALLY_ASCENDING_WORD));
+	}
+
+	@Test
 	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnBottom() {
-		search.setRows(buildRowsWithDiagonallyAscending(false));
+		search.setRows(buildRowsWithDiagonallyAscending(false, true));
 		assertArrayEquals(new int[][] {{10,1}, {9,2}, {8,3}, {7,4}, {6,5}, {5,6}, {4,7}}, search.findDiagonallyAscending(DIAGONALLY_ASCENDING_WORD));
+	}
+
+	@Test
+	public void shouldFindDiagonalAscendingWord_WhenExistsInDiagonalStartingOnBottomAndInReverse() {
+		search.setRows(buildRowsWithDiagonallyAscending(false, false));
+		assertArrayEquals(new int[][] {{4,7}, {5,6}, {6,5}, {7,4}, {8,3}, {9,2}, {10,1}}, search.findDiagonallyAscending(DIAGONALLY_ASCENDING_WORD));
 	}
 	
 	@Test
 	public void shouldReturnNull_WhenDiagonallyAscendingWordNotFound() {
-		search.setRows(buildRowsWithDiagonallyAscending(true));
+		search.setRows(buildRowsWithDiagonallyAscending(true, true));
 		assertNull(search.findDiagonallyAscending("zyx"));
 	}
 	
@@ -103,57 +140,57 @@ public class WordSearchTest {
 	 * Helper methods for tests
 	 */
 	
-	private char[][] buildRowsWithDiagonallyAscending(boolean startSearchOnLeft) {
+	private char[][] buildRowsWithDiagonallyAscending(boolean startSearchOnLeft, boolean isNormalDirection) {
 		char[][] rows = new char[10][];
 		int startCount = startSearchOnLeft ? 0 : 1;
 		rows[startSearchOnLeft ? 9 : 0] = "aaaaaaaaaa".toCharArray();
 		rows[0 + startCount] = "aaaaaaaaaa".toCharArray();
 		rows[1 + startCount] = "aaaaaaaaaa".toCharArray();
-		rows[2 + startCount] = ("aaaaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(6) + "aa").toCharArray();
-		rows[3 + startCount] = ("aaaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(5) + "aaa").toCharArray();
-		rows[4 + startCount] = ("aaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(4) + "aaaa").toCharArray();
+		rows[2 + startCount] = ("aaaaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(isNormalDirection ? 6 : 0) + "aa").toCharArray();
+		rows[3 + startCount] = ("aaaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(isNormalDirection ? 5 : 1) + "aaa").toCharArray();
+		rows[4 + startCount] = ("aaaaa" + DIAGONALLY_ASCENDING_WORD.charAt(isNormalDirection ? 4 : 2) + "aaaa").toCharArray();
 		rows[5 + startCount] = ("aaaa" + DIAGONALLY_ASCENDING_WORD.charAt(3) + "aaaaa").toCharArray();
-		rows[6 + startCount] = ("aaa" + DIAGONALLY_ASCENDING_WORD.charAt(2) + "aaaaaa").toCharArray();
-		rows[7 + startCount] = ("aa" + DIAGONALLY_ASCENDING_WORD.charAt(1) + "aaaaaaa").toCharArray();
-		rows[8 + startCount] = ("a" + DIAGONALLY_ASCENDING_WORD.charAt(0) + "aaaaaaaa").toCharArray();
+		rows[6 + startCount] = ("aaa" + DIAGONALLY_ASCENDING_WORD.charAt(isNormalDirection ? 2 : 4) + "aaaaaa").toCharArray();
+		rows[7 + startCount] = ("aa" + DIAGONALLY_ASCENDING_WORD.charAt(isNormalDirection ? 1 : 5) + "aaaaaaa").toCharArray();
+		rows[8 + startCount] = ("a" + DIAGONALLY_ASCENDING_WORD.charAt(isNormalDirection ? 0 : 6) + "aaaaaaaa").toCharArray();
 		return rows;
 	}
 
-	private char[][] buildRowsWithDiagonallyDescendingWord(boolean startOnLeft) {
+	private char[][] buildRowsWithDiagonallyDescendingWord(boolean startOnLeft, boolean isNormalDirection) {
 		char[][] rows = new char[10][];
 		int startCount = startOnLeft ? 1 : 0;
 		rows[startOnLeft ? 0 : 9] = "aaaaaaaaaa".toCharArray();
-		rows[0 + startCount] = ("a" + DIAGONALLY_DESCENDING_WORD.charAt(0) + "aaaaaaaa").toCharArray();
-		rows[1 + startCount] = ("aa" + DIAGONALLY_DESCENDING_WORD.charAt(1) + "aaaaaaa").toCharArray();
-		rows[2 + startCount] = ("aaa" + DIAGONALLY_DESCENDING_WORD.charAt(2) + "aaaaaa").toCharArray();
-		rows[3 + startCount] = ("aaaa" + DIAGONALLY_DESCENDING_WORD.charAt(3) + "aaaaa").toCharArray();
-		rows[4 + startCount] = ("aaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(4) + "aaaa").toCharArray();
-		rows[5 + startCount] = ("aaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(5) + "aaa").toCharArray();
-		rows[6 + startCount] = ("aaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(6) + "aa").toCharArray();
-		rows[7 + startCount] = ("aaaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(7) + "a").toCharArray();
+		rows[0 + startCount] = ("a" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 0 : 7) + "aaaaaaaa").toCharArray();
+		rows[1 + startCount] = ("aa" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 1 : 6) + "aaaaaaa").toCharArray();
+		rows[2 + startCount] = ("aaa" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 2 : 5) + "aaaaaa").toCharArray();
+		rows[3 + startCount] = ("aaaa" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 3 : 4) + "aaaaa").toCharArray();
+		rows[4 + startCount] = ("aaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 4 : 3) + "aaaa").toCharArray();
+		rows[5 + startCount] = ("aaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 5 : 2) + "aaa").toCharArray();
+		rows[6 + startCount] = ("aaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 6 : 1) + "aa").toCharArray();
+		rows[7 + startCount] = ("aaaaaaaa" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 7 : 0) + "a").toCharArray();
 		rows[8 + startCount] = "aaaaaaaaaa".toCharArray();
 		return rows;
 	}
 	
-	private char[][] buildRowsWithVerticalWord() {
+	private char[][] buildRowsWithVerticalWord(boolean isNormalDirection) {
 		char[][] rows = new char[10][];
 		rows[0] = "aaaaaaaaaa".toCharArray();
 		rows[1] = "aaaaaaaaaa".toCharArray();
-		rows[2] = ("a" + VERTICAL_WORD.charAt(0) + "aaaaaaaa").toCharArray();
-		rows[3] = ("a" + VERTICAL_WORD.charAt(1) + "aaaaaaaa").toCharArray();
+		rows[2] = ("a" + VERTICAL_WORD.charAt(isNormalDirection ? 0 : 4) + "aaaaaaaa").toCharArray();
+		rows[3] = ("a" + VERTICAL_WORD.charAt(isNormalDirection ? 1 : 3) + "aaaaaaaa").toCharArray();
 		rows[4] = ("a" + VERTICAL_WORD.charAt(2) + "aaaaaaaa").toCharArray();
-		rows[5] = ("a" + VERTICAL_WORD.charAt(3) + "aaaaaaaa").toCharArray();
-		rows[6] = ("a" + VERTICAL_WORD.charAt(4) + "aaaaaaaa").toCharArray();
+		rows[5] = ("a" + VERTICAL_WORD.charAt(isNormalDirection ? 3 : 1) + "aaaaaaaa").toCharArray();
+		rows[6] = ("a" + VERTICAL_WORD.charAt(isNormalDirection ? 4 : 0) + "aaaaaaaa").toCharArray();
 		rows[7] = "aaaaaaaaaa".toCharArray();
 		rows[8] = "aaaaaaaaaa".toCharArray();
 		rows[9] = "aaaaaaaaaa".toCharArray();
 		return rows;
 	}
-	private char[][] buildRowsWithHorizontalWord() {
+	private char[][] buildRowsWithHorizontalWord(boolean isNormalDirection) {
 		
 		char[][] rows = new char[3][];
 		rows[0] = LINE_WITHOUT_WORD;
-		rows[1] = LINE_WITH_WORD;
+		rows[1] = isNormalDirection ? LINE_WITH_WORD : new StringBuilder(String.valueOf(LINE_WITH_WORD)).reverse().toString().toCharArray();
 		rows[2] = LINE_WITHOUT_WORD;
 		return rows;
 	}
