@@ -12,8 +12,25 @@ public class WordSearch {
 	public void setWord(String word) {
 		this.word = word;
 	}
+	
+	public String find() {
+		String searchResults = word + ": ";
+		int[][] coordinates = findWord();
 
-	public int[][] find() {
+		if (coordinates != null) {
+			for (int i = 0; i < coordinates.length; i++) {
+				if (i > 0) {
+					searchResults += ",";
+				}
+				int[] letter = coordinates[i];
+				searchResults += ("(" + letter[0] + "," + letter[1] + ")");
+			}
+		}
+		
+		return searchResults;
+	}
+
+	public int[][] findWord() {
 		int[][] searchResult = null;
 		
 		for (SearchDirection direction : SearchDirection.values()) {
@@ -42,7 +59,7 @@ public class WordSearch {
 	private int[][] findCoordinates(int startX, int startY, int wordLength, SearchDirection direction) {
 		int[][] returnValue = new int[wordLength][2];
 		for (int i = 0; i < wordLength; i++) {
-			returnValue[i] = new int[] {startX, startY};
+			returnValue[i] = new int[] {startY, startX};
 			startX += direction.scopeX;
 			startY += direction.scopeY;
 		}
@@ -52,7 +69,7 @@ public class WordSearch {
 	private int[][] findReverseCoordinates(int startX, int startY, int wordLength, SearchDirection direction) {
 		int[][] returnValue = new int[wordLength][2];
 		for (int i = 0; i < wordLength; i++) {
-			returnValue[i] = new int[] {startX, startY};
+			returnValue[i] = new int[] {startY, startX};
 			startX -= direction.scopeX;
 			startY -= direction.scopeY;
 		}
