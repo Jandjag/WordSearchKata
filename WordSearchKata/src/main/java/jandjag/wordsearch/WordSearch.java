@@ -16,24 +16,24 @@ public class WordSearch {
 	public int[][] find() {
 		int[][] searchResult = null;
 		
-		searchResult = findHorizontal();
-		if (searchResult != null) {
-			return searchResult;
-		}
-		
-		searchResult = findVertical();
-		if (searchResult != null) {
-			return searchResult;
-		}
-
-		searchResult = findDiagonallyDescending();
-		if (searchResult != null) {
-			return searchResult;
-		}
-
-		searchResult = findDiagonallyAscending();
-		if (searchResult != null) {
-			return searchResult;
+		for (SearchDirection direction : SearchDirection.values()) {
+			switch (direction) {
+				case HORIZONTAL:
+					searchResult = findHorizontal();
+					break;
+				case VERTICAL:
+					searchResult = findVertical();
+					break;
+				case DIAGONALLY_DESCENDING:
+					searchResult = findDiagonallyDescending();
+					break;
+				case DIAGONALLY_ASCENDING:
+					searchResult = findDiagonallyAscending();
+					break;
+			}
+			if (searchResult != null) {
+				return searchResult;
+			}
 		}
 		
 		return null;
