@@ -157,7 +157,7 @@ public class WordSearchTest {
 	 */
 	
 	private char[][] buildRowsWithDiagonallyAscending(boolean startSearchOnLeft, boolean isNormalDirection) {
-		char[][] rows = new char[10][];
+		char[][] rows = new char[10][10];
 		int startCount = startSearchOnLeft ? 0 : 1;
 		rows[startSearchOnLeft ? 9 : 0] = "aaaaaaaaaa".toCharArray();
 		rows[0 + startCount] = "aaaaaaaaaa".toCharArray();
@@ -173,7 +173,7 @@ public class WordSearchTest {
 	}
 
 	private char[][] buildRowsWithDiagonallyDescendingWord(boolean startOnLeft, boolean isNormalDirection) {
-		char[][] rows = new char[10][];
+		char[][] rows = new char[10][10];
 		int startCount = startOnLeft ? 1 : 0;
 		rows[startOnLeft ? 0 : 9] = "aaaaaaaaaa".toCharArray();
 		rows[0 + startCount] = ("a" + DIAGONALLY_DESCENDING_WORD.charAt(isNormalDirection ? 0 : 7) + "aaaaaaaa").toCharArray();
@@ -189,7 +189,7 @@ public class WordSearchTest {
 	}
 	
 	private char[][] buildRowsWithVerticalWord(boolean isNormalDirection) {
-		char[][] rows = new char[10][];
+		char[][] rows = new char[10][10];
 		rows[0] = "aaaaaaaaaa".toCharArray();
 		rows[1] = "aaaaaaaaaa".toCharArray();
 		rows[2] = ("a" + VERTICAL_WORD.charAt(isNormalDirection ? 0 : 4) + "aaaaaaaa").toCharArray();
@@ -204,10 +204,23 @@ public class WordSearchTest {
 	}
 	private char[][] buildRowsWithHorizontalWord(boolean isNormalDirection) {
 		
-		char[][] rows = new char[3][];
+		char[][] rows = new char[16][16];
 		rows[0] = LINE_WITHOUT_WORD;
 		rows[1] = isNormalDirection ? LINE_WITH_WORD : new StringBuilder(String.valueOf(LINE_WITH_WORD)).reverse().toString().toCharArray();
 		rows[2] = LINE_WITHOUT_WORD;
+		rows[3] = LINE_WITHOUT_WORD;
+		rows[4] = LINE_WITHOUT_WORD;
+		rows[5] = LINE_WITHOUT_WORD;
+		rows[6] = LINE_WITHOUT_WORD;
+		rows[7] = LINE_WITHOUT_WORD;
+		rows[8] = LINE_WITHOUT_WORD;
+		rows[9] = LINE_WITHOUT_WORD;
+		rows[10] = LINE_WITHOUT_WORD;
+		rows[11] = LINE_WITHOUT_WORD;
+		rows[12] = LINE_WITHOUT_WORD;
+		rows[13] = LINE_WITHOUT_WORD;
+		rows[14] = LINE_WITHOUT_WORD;
+		rows[15] = LINE_WITHOUT_WORD;
 		return rows;
 	}
 	

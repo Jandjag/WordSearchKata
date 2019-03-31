@@ -41,7 +41,8 @@ public class WordSearch {
 	
 	private int[][] findHorizontal() {
 		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
-			int begin = String.valueOf(rows[rowNum]).indexOf(word);
+			String rowAsString = buildDirectionalStringFromRows(rowNum, 0, SearchDirection.HORIZONTAL);
+			int begin = rowAsString.indexOf(word);
 			if (begin >= 0) {
 				int[][] returnValue = new int[word.length()][2];
 				for (int i = 0; i < word.length(); i++) {
@@ -49,12 +50,10 @@ public class WordSearch {
 				}
 				return returnValue;
 			}
-		}
-		
-		//Test if it is reversed.
-		String reverseWord = reverse(word);
-		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
-			int begin = String.valueOf(rows[rowNum]).indexOf(reverseWord);
+
+			//Test if it is reversed.
+			String reverseWord = reverse(word);
+			begin = String.valueOf(rows[rowNum]).indexOf(reverseWord);
 			if (begin >= 0) {
 				int end = begin + reverseWord.length() - 1;
 				int[][] returnValue = new int[word.length()][2];
@@ -63,14 +62,30 @@ public class WordSearch {
 				}
 				return returnValue;
 			}
-		}		
+		}
 		
 		return null;
 	}
 	
+	private String buildDirectionalStringFromRows(int startX, int startY, SearchDirection direction) {
+		
+		String stringFromRow = "";
+		int scopeX = direction.scopeX;
+		int scopeY = direction.scopeY;
+		int max = rows.length;
+
+		for (int i = 0; i < max && startX < max && startY < max && startX >= 0 && startY >= 0; i++) {
+			stringFromRow += rows[startX][startY];
+			startX += scopeX;
+			startY += scopeY;
+		}
+		
+		return stringFromRow;
+	}
+
 	private int[][] findVertical() {
 		for (int col = 0; col < rows.length; col++) {
-			String columnValue = buildVerticalString(col);
+			String columnValue = buildDirectionalStringFromRows(0, col, SearchDirection.VERTICAL);
 			int beginRow = columnValue.indexOf(word);
 			if (beginRow >= 0) {
 				int[][] returnValue = new int[word.length()][2];
@@ -99,18 +114,10 @@ public class WordSearch {
 		return new StringBuilder(word).reverse().toString();
 	}
 
-	private String buildVerticalString(int column) {
-		char[] columnChars = new char[rows.length];
-		for (int i = 0; i < rows.length; i++) {
-			columnChars[i] = rows[i][column];
-		}
-		return String.valueOf(columnChars);
-	}
-
 	private int[][] findDiagonallyDescending() {
 		//Search for Diagonals starting in first column.
 		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
-			String diagonal = buildDiagonalDescendingString(rowNum, 0);
+			String diagonal = buildDirectionalStringFromRows(rowNum, 0, SearchDirection.DIAGONALLY_DESCENDING);
 			int beginCol = diagonal.indexOf(word);
 			if (beginCol >= 0) {
 				int[][] returnValue = new int[word.length()][2];
@@ -135,7 +142,7 @@ public class WordSearch {
 		
 		//Search the diagonals that start on the top.
 		for (int colNum = 1; colNum < rows.length; colNum++) {
-			String diagonal = buildDiagonalDescendingString(0, colNum);
+			String diagonal = buildDirectionalStringFromRows(0, colNum, SearchDirection.DIAGONALLY_DESCENDING);
 			int beginRow = diagonal.indexOf(word);
 			if (beginRow >= 0) {
 				int[][] returnValue = new int[word.length()][2];
@@ -161,29 +168,10 @@ public class WordSearch {
 		return null;
 	}
 	
-	/**
-	 * 
-	 * @param startX The index of the row to start the search.
-	 * @param startY The index of the column to start the search.
-	 * @return String of the characters in a diagonally descending line from the rows set in the class.
-	 */
-	private String buildDiagonalDescendingString(int startX, int startY) {
-		String diagonalString = "";
-		int max = rows.length;
-		
-		for (int x = 0; x < max && startX < max && startY < max; x++) {
-			diagonalString += rows[startX][startY];
-			startX++;
-			startY++;
-		}
-		
-		return diagonalString;
-	}
-
 	private int[][] findDiagonallyAscending() {
 		//Search for Diagonals starting in first column.
 		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
-			String diagonal = buildDiagonalAscendingString(rowNum, 0);
+			String diagonal = buildDirectionalStringFromRows(rowNum, 0, SearchDirection.DIAGONALLY_ASCENDING);
 			int beginCol = diagonal.indexOf(word);
 			if (beginCol >= 0) {
 				int[][] returnValue = new int[word.length()][2];
@@ -208,7 +196,7 @@ public class WordSearch {
 		
 		//Search the diagonals that start on the bottom.
 		for (int colNum = 1; colNum < rows.length; colNum++) {
-			String diagonal = buildDiagonalAscendingString(rows.length - 1, colNum);
+			String diagonal = buildDirectionalStringFromRows(rows.length - 1, colNum, SearchDirection.DIAGONALLY_ASCENDING);
 			int beginRow = diagonal.indexOf(word);
 			if (beginRow >= 0) {
 				int[][] returnValue = new int[word.length()][2];
@@ -232,25 +220,6 @@ public class WordSearch {
 		}
 			
 		return null;
-	}
-	
-	/**
-	 * 
-	 * @param startX The index of the row to start the search.
-	 * @param startY The index of the column to start the search.
-	 * @return String of the characters in a diagonally ascending line from the rows set in the class.
-	 */
-	private String buildDiagonalAscendingString(int startX, int startY) {
-		String diagonalString = "";
-		int max = rows.length;
-		
-		for (int x = 0; x < max && startX >= 0 && startX < max && startY < max; x++) {
-			diagonalString += rows[startX][startY];
-			startX--;
-			startY++;
-		}
-		
-		return diagonalString;
 	}
 
 }
