@@ -3,12 +3,43 @@ package jandjag.wordsearch;
 public class WordSearch {
 
 	private char[][] rows = null;
+	private String word = null;
 	
 	public void setRows(char[][] rows) {
 		this.rows = rows;
 	}
+	
+	public void setWord(String word) {
+		this.word = word;
+	}
 
-	int[][] findHorizontal(String word) {
+	public int[][] find() {
+		int[][] searchResult = null;
+		
+		searchResult = findHorizontal();
+		if (searchResult != null) {
+			return searchResult;
+		}
+		
+		searchResult = findVertical();
+		if (searchResult != null) {
+			return searchResult;
+		}
+
+		searchResult = findDiagonallyDescending();
+		if (searchResult != null) {
+			return searchResult;
+		}
+
+		searchResult = findDiagonallyAscending();
+		if (searchResult != null) {
+			return searchResult;
+		}
+		
+		return null;
+	}
+	
+	private int[][] findHorizontal() {
 		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
 			int begin = String.valueOf(rows[rowNum]).indexOf(word);
 			if (begin >= 0) {
@@ -37,7 +68,7 @@ public class WordSearch {
 		return null;
 	}
 	
-	int[][] findVertical(String word) {
+	private int[][] findVertical() {
 		for (int col = 0; col < rows.length; col++) {
 			String columnValue = buildVerticalString(col);
 			int beginRow = columnValue.indexOf(word);
@@ -68,7 +99,7 @@ public class WordSearch {
 		return new StringBuilder(word).reverse().toString();
 	}
 
-	String buildVerticalString(int column) {
+	private String buildVerticalString(int column) {
 		char[] columnChars = new char[rows.length];
 		for (int i = 0; i < rows.length; i++) {
 			columnChars[i] = rows[i][column];
@@ -76,7 +107,7 @@ public class WordSearch {
 		return String.valueOf(columnChars);
 	}
 
-	int[][] findDiagonallyDescending(String word) {
+	private int[][] findDiagonallyDescending() {
 		//Search for Diagonals starting in first column.
 		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
 			String diagonal = buildDiagonalDescendingString(rowNum, 0);
@@ -136,7 +167,7 @@ public class WordSearch {
 	 * @param startY The index of the column to start the search.
 	 * @return String of the characters in a diagonally descending line from the rows set in the class.
 	 */
-	String buildDiagonalDescendingString(int startX, int startY) {
+	private String buildDiagonalDescendingString(int startX, int startY) {
 		String diagonalString = "";
 		int max = rows.length;
 		
@@ -149,7 +180,7 @@ public class WordSearch {
 		return diagonalString;
 	}
 
-	int[][] findDiagonallyAscending(String word) {
+	private int[][] findDiagonallyAscending() {
 		//Search for Diagonals starting in first column.
 		for (int rowNum = 0; rowNum < rows.length; rowNum++) {
 			String diagonal = buildDiagonalAscendingString(rowNum, 0);
@@ -209,7 +240,7 @@ public class WordSearch {
 	 * @param startY The index of the column to start the search.
 	 * @return String of the characters in a diagonally ascending line from the rows set in the class.
 	 */
-	String buildDiagonalAscendingString(int startX, int startY) {
+	private String buildDiagonalAscendingString(int startX, int startY) {
 		String diagonalString = "";
 		int max = rows.length;
 		
